@@ -12,22 +12,23 @@ import org.springframework.web.bind.MissingRequestValueException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
 
-    @ExceptionHandler(MissingRequestValueException.class)
+    @ExceptionHandler({MissingRequestValueException.class, MethodArgumentTypeMismatchException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleMissingRequestValueException(MissingRequestValueException ex, HttpServletRequest request) {
+    public ErrorResponse handleMissingRequestValueException(Exception ex, HttpServletRequest request) {
         var errors = new HashMap<String, String>();
-        errors.put("missingValue", ex.getMessage() );
+        errors.put("requestValue", ex.getMessage());
 
         return new ErrorResponse(
                 LocalDateTime.now(),
                 HttpStatus.BAD_REQUEST.value(),
-                "Missing Value",
+                "Request Value error",
                 errors,
                 request.getRequestURI());
     }
