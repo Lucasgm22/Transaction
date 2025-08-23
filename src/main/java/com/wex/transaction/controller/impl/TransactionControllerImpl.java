@@ -30,6 +30,7 @@ public class TransactionControllerImpl implements TransactionController {
 
     @Override
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public ConvertedTransactionResponse getConvertedTransaction(@PathVariable UUID id, @RequestParam String currency) {
         return new ConvertedTransactionResponse(UUID.randomUUID(),
                 "description",
