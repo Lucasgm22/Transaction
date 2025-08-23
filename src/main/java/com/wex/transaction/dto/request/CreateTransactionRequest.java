@@ -1,5 +1,6 @@
 package com.wex.transaction.dto.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
@@ -10,12 +11,18 @@ import java.time.LocalDate;
 
 public record CreateTransactionRequest(
 
+        @Schema(description = "Brief description of the purchase, max 50 characters.",
+                example = "New keyboard for home office")
         @NotBlank @Size(max = 50)
         String description,
 
+        @Schema(description = "Date of the transaction in YYYY-MM-DD format.",
+                example = "2025-08-20")
         @NotNull @PastOrPresent
         LocalDate transactionDate,
 
+        @Schema(description = "Total purchase amount in USD, must be a positive value.",
+                example = "150.75")
         @NotNull @Positive
         BigDecimal purchaseAmount
 ) {}
