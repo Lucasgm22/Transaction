@@ -4,10 +4,12 @@ import com.wex.transaction.controller.TransactionController;
 import com.wex.transaction.dto.request.CreateTransactionRequest;
 import com.wex.transaction.dto.response.ConvertedTransactionResponse;
 import com.wex.transaction.dto.response.CreateTransactionResponse;
+import com.wex.transaction.service.TransactionService;
 import jakarta.validation.Valid;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,14 +20,17 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/transaction")
 public class TransactionControllerImpl implements TransactionController {
+
+    private final TransactionService transactionService;
 
     @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CreateTransactionResponse storeTransaction(@Valid CreateTransactionRequest request) {
-        return new CreateTransactionResponse(UUID.randomUUID());
+        return transactionService.storeTransaction(request);
     }
 
     @Override
