@@ -1,0 +1,25 @@
+logging.level:
+  root: INFO
+  org:
+    springframework: WARN
+    hibernate: WARN
+  com.zaxxer.hikari: WARN
+
+
+api.treasury.base-url: https://api.fiscaldata.treasury.gov/services/api/fiscal_service
+
+server.shutdown: graceful
+
+management:
+  tracing.sampling.probability: 1
+  server.port: 4444
+  health:
+    probes.enabled: true
+  endpoints:
+    web.exposure.include: "health,info,prometheus,loggers"
+  endpoint:
+    health:
+      show-details: ALWAYS
+      group:
+        readiness.include: "readinessState,db,treasuryApi"
+        liveness.include: "livenessState"

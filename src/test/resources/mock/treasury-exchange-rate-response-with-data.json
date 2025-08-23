@@ -1,0 +1,32 @@
+{
+    "data": [
+        {
+            "exchange_rate": "5.5",
+            "record_date": "2024-06-30"
+        }
+    ],
+    "meta": {
+        "count": 1,
+        "labels": {
+            "exchange_rate": "Exchange Rate",
+            "record_date": "Record Date"
+        },
+        "dataTypes": {
+            "exchange_rate": "NUMBER",
+            "record_date": "DATE"
+        },
+        "dataFormats": {
+            "exchange_rate": "10.2",
+            "record_date": "YYYY-MM-DD"
+        },
+        "total-count": 2,
+        "total-pages": 2
+    },
+    "links": {
+        "self": "&page%5Bnumber%5D=1&page%5Bsize%5D=1",
+        "first": "&page%5Bnumber%5D=1&page%5Bsize%5D=1",
+        "prev": null,
+        "next": "&page%5Bnumber%5D=2&page%5Bsize%5D=1",
+        "last": "&page%5Bnumber%5D=2&page%5Bsize%5D=1"
+    }
+}
