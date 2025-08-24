@@ -29,7 +29,7 @@ public class ExchangeRateService {
         var sixMonthsAgo = transactionDate.minusMonths(6);
 
         return treasuryApiClient
-                .fetchExchangeRates(currency, sixMonthsAgo, transactionDate)
+                .getTopExchangeRateByCurrencyInRecordDateRangeSortedByRecordDateDesc(currency, sixMonthsAgo, transactionDate)
                 .filter(treasuryRateResponse -> nonNull(treasuryRateResponse.data()))
                 .flatMap(response -> response.data().stream().findAny())
                 .map(treasuryRateDataResponse -> {

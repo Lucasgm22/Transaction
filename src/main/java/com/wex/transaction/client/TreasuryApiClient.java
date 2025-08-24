@@ -16,7 +16,7 @@ public class TreasuryApiClient {
 
     private final RestClient treasuryRestClient;
 
-    public Optional<TreasuryExchangeRateResponse> fetchExchangeRates(String currency, LocalDate startDate, LocalDate endDate) {
+    public Optional<TreasuryExchangeRateResponse> getTopExchangeRateByCurrencyInRecordDateRangeSortedByRecordDateDesc(final String currency, final LocalDate startDate, final LocalDate endDate) {
         log.info("Calling TreasuryAPI for currency: '{}' on interval from {} to {}", currency, startDate, endDate);
         try {
             var response = treasuryRestClient.get()
