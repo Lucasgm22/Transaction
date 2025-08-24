@@ -18,7 +18,7 @@ public class ExchangeRateService {
 
     private final TreasuryApiClient treasuryApiClient;
 
-    public BigDecimal getExchangeRate(String currency, LocalDate transactionDate) {
+    public BigDecimal getExchangeRate(final String currency, final LocalDate transactionDate) {
         log.debug("Starting fetch for exchange rate");
 
         if (StringUtils.isBlank(currency)) {

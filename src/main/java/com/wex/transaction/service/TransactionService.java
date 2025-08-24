@@ -21,7 +21,7 @@ public class TransactionService {
     private final ExchangeRateService exchangeRateService;
     private final TransactionRepository transactionRepository;
 
-    public CreateTransactionResponse storeTransaction(CreateTransactionRequest request) {
+    public CreateTransactionResponse storeTransaction(final CreateTransactionRequest request) {
         log.debug("Starting transaction store");
         var newTransaction = transactionMapper.toEntity(request);
 
@@ -30,7 +30,7 @@ public class TransactionService {
         return new CreateTransactionResponse(storedTransaction.getUuid());
     }
 
-    public ConvertedTransactionResponse getConvertedTransaction(UUID id, String currency) {
+    public ConvertedTransactionResponse getConvertedTransaction(final UUID id, final String currency) {
         log.debug("Starting transaction {} conversion process", id);
         var transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new TransactionNotFoundException("Transaction not found with id: " + id));

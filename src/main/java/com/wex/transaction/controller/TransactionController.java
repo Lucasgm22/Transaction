@@ -35,7 +35,7 @@ public interface TransactionController {
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class)))
     })
-    CreateTransactionResponse storeTransaction(@Valid @RequestBody CreateTransactionRequest request);
+    CreateTransactionResponse storeTransaction(@Valid @RequestBody final CreateTransactionRequest request);
 
     @Operation(summary = "Retrieve a transaction in a specified currency",
             description = "Fetches a stored transaction by its ID and converts the purchase amount to the target currency.")
@@ -50,7 +50,7 @@ public interface TransactionController {
     ConvertedTransactionResponse getConvertedTransaction(
             @Parameter(description = "Unique identifier of the transaction (UUID)", example = "a1b2c3d4-e5f6-7890-1234-567890abcdef")
             @PathVariable
-            UUID id,
+            final UUID id,
 
             @Parameter(description = "Target currency for conversion, if not given no conversion is made", example = "Brazil-Real")
             @Pattern(
@@ -58,6 +58,6 @@ public interface TransactionController {
                     message = "Currency format is invalid or contains prohibited characters."
             )
             @RequestParam(required = false)
-            String currency
+            final String currency
     );
 }

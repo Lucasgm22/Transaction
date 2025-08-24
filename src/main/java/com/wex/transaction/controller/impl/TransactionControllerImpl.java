@@ -28,7 +28,7 @@ public class TransactionControllerImpl implements TransactionController {
     @Override
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CreateTransactionResponse storeTransaction(CreateTransactionRequest request) {
+    public CreateTransactionResponse storeTransaction(final CreateTransactionRequest request) {
         log.info("Received request to store transaction with description: '{}'", request.description());
         return transactionService.storeTransaction(request);
     }
@@ -36,7 +36,7 @@ public class TransactionControllerImpl implements TransactionController {
     @Override
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ConvertedTransactionResponse getConvertedTransaction(@PathVariable UUID id, String currency) {
+    public ConvertedTransactionResponse getConvertedTransaction(@PathVariable final UUID id, final String currency) {
         log.info("Received request to convert transaction ID {} to currency {}", id, StringUtils.isNotBlank(currency) ? currency : "United States-Dollar" );
         return transactionService.getConvertedTransaction(id, currency);
     }

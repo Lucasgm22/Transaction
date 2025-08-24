@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class TransactionMapper {
 
-    public Transaction toEntity(CreateTransactionRequest request) {
+    public Transaction toEntity(final CreateTransactionRequest request) {
         if (request == null) {
             return null;
         }
@@ -25,7 +25,7 @@ public class TransactionMapper {
         return transaction;
     }
 
-    public ConvertedTransactionResponse toConvertedDto(Transaction transaction, BigDecimal exchangeRate, BigDecimal convertedAmount) {
+    public ConvertedTransactionResponse toConvertedDto(final Transaction transaction, final BigDecimal exchangeRate, final BigDecimal convertedAmount) {
         return new ConvertedTransactionResponse(
                 transaction.getUuid(),
                 transaction.getDescription(),

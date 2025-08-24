@@ -15,8 +15,8 @@ public class AppConfig {
     private final ObservationRegistry observationRegistry;
 
     public AppConfig(@Value("${api.treasury.base-url}")
-                     String treasuryApiBaseUrl,
-                     ObservationRegistry observationRegistry) {
+                     final String treasuryApiBaseUrl,
+                     final ObservationRegistry observationRegistry) {
             this.treasuryApiBaseUrl = treasuryApiBaseUrl;
             this.observationRegistry = observationRegistry;
     }
