@@ -11,7 +11,7 @@ import java.time.LocalDate;
 
 public record CreateTransactionRequest(
 
-        @Schema(description = "Brief description of the purchase, max 50 characters.",
+        @Schema(description = "Brief description of the transaction, max 50 characters.",
                 example = "New keyboard for home office")
         @NotBlank @Size(max = 50)
         String description,
@@ -21,7 +21,7 @@ public record CreateTransactionRequest(
         @NotNull @PastOrPresent
         LocalDate transactionDate,
 
-        @Schema(description = "Total purchase amount in USD, must be a positive value.",
+        @Schema(description = "Total transaction amount in USD, must be a positive value.",
                 example = "150.75")
         @NotNull @Positive
         BigDecimal purchaseAmount

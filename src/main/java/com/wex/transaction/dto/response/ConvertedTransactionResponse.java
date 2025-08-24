@@ -11,7 +11,7 @@ public record ConvertedTransactionResponse(
                 example = "a1b2c3d4-e5f6-7890-1234-567890abcdef")
         UUID id,
 
-        @Schema(description = "Brief description of the purchase, max 50 characters.",
+        @Schema(description = "Brief description of the transaction, max 50 characters.",
                 example = "New keyboard for home office")
         String description,
 
@@ -20,7 +20,7 @@ public record ConvertedTransactionResponse(
         LocalDate transactionDate,
 
 
-        @Schema(description = "Original purchase amount in US Dollars.",
+        @Schema(description = "Original transaction amount in US Dollars.",
                 example = "150.75")
         BigDecimal originalPurchaseAmount,
 
@@ -28,7 +28,7 @@ public record ConvertedTransactionResponse(
                 example = "5.123")
         BigDecimal exchangeRate,
 
-        @Schema(description = "The converted purchase amount in the target currency.",
+        @Schema(description = "The converted transaction amount in the target currency.",
                 example = "772.35")
         BigDecimal convertedAmount
 ) {}
