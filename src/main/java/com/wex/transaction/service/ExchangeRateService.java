@@ -1,7 +1,6 @@
 package com.wex.transaction.service;
 
 import com.wex.transaction.client.TreasuryApiClient;
-import com.wex.transaction.dto.client.response.TreasuryRateDataResponse;
 import com.wex.transaction.exception.ExchangeRateNotFoundException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -9,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+
+import static java.util.Objects.nonNull;
 
 @Service
 @Slf4j
@@ -29,6 +30,7 @@ public class ExchangeRateService {
 
         return treasuryApiClient
                 .fetchExchangeRates(currency, sixMonthsAgo, transactionDate)
+                .filter(treasuryRateResponse -> nonNull(treasuryRateResponse.data()))
                 .flatMap(response -> response.data().stream().findAny())
                 .map(treasuryRateDataResponse -> {
                     log.info("Using exchange rate {} from {}", treasuryRateDataResponse.exchangeRate(), treasuryRateDataResponse.recordDate());
