@@ -9,5 +9,8 @@ import java.time.LocalDate;
 public record TreasuryRateDataResponse(
 
         @JsonProperty("exchange_rate")
-        BigDecimal exchangeRate
+        BigDecimal exchangeRate,
+
+        @JsonProperty("record_date")
+        LocalDate recordDate
 ) {}
