@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestValueException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,9 +20,11 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 public class GlobalExceptionHandler {
 
     @ExceptionHandler({TransactionNotFoundException.class, ExchangeRateNotFoundException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleResourceNotFoundException(RuntimeException ex, HttpServletRequest request) {
         var errors = new HashMap<String, String>();
         errors.put("resourceNotFound", ex.getMessage());
+        log.warn("Fail to find the resource: {}. Reason: {}", request.getRequestURI(), ex.getMessage());
 
         return new ErrorResponse(
                 LocalDateTime.now(),
@@ -38,6 +39,7 @@ public class GlobalExceptionHandler {
     public ErrorResponse handleRequestValueException(Exception ex, HttpServletRequest request) {
         var errors = new HashMap<String, String>();
         errors.put("requestValue", ex.getMessage());
+        log.warn("Failed to read the request: {}. Reason: {}", request.getRequestURI(), ex.getMessage());
 
         return new ErrorResponse(
                 LocalDateTime.now(),
@@ -54,6 +56,7 @@ public class GlobalExceptionHandler {
         ex.getBindingResult().getFieldErrors().forEach(error ->
                 errors.put(error.getField(), error.getDefaultMessage())
         );
+        log.warn("Failed to read the request: {}. Reason: {}", request.getRequestURI(), ex.getMessage());
 
         return new ErrorResponse(
                 LocalDateTime.now(),
@@ -70,6 +73,7 @@ public class GlobalExceptionHandler {
 
         ex.getAllErrors().stream().findFirst()
                 .ifPresent(messageSourceResolvable -> errors.put("requestValue", messageSourceResolvable.getDefaultMessage()));
+        log.warn("Failed to read the request: {}. Reason: {}", request.getRequestURI(), ex.getMessage());
 
         return new ErrorResponse(
                 LocalDateTime.now(),

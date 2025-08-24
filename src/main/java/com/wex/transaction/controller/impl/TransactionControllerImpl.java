@@ -7,6 +7,8 @@ import com.wex.transaction.dto.response.CreateTransactionResponse;
 import com.wex.transaction.service.TransactionService;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/transaction")
 public class TransactionControllerImpl implements TransactionController {
 
@@ -26,6 +29,7 @@ public class TransactionControllerImpl implements TransactionController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CreateTransactionResponse storeTransaction(CreateTransactionRequest request) {
+        log.info("Received request to store transaction with description: '{}'", request.description());
         return transactionService.storeTransaction(request);
     }
 
@@ -33,6 +37,7 @@ public class TransactionControllerImpl implements TransactionController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ConvertedTransactionResponse getConvertedTransaction(@PathVariable UUID id, String currency) {
+        log.info("Received request to convert transaction ID {} to currency {}", id, StringUtils.isNotBlank(currency) ? currency : "United States-Dollar" );
         return transactionService.getConvertedTransaction(id, currency);
     }
 }
