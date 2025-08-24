@@ -1,6 +1,6 @@
 package com.wex.transaction.client;
 
-import com.wex.transaction.dto.client.response.TreasuryRateResponse;
+import com.wex.transaction.dto.client.response.TreasuryExchangeRateResponse;
 import java.time.LocalDate;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ public class TreasuryApiClient {
 
     private final RestClient treasuryRestClient;
 
-    public Optional<TreasuryRateResponse> fetchExchangeRates(String currency, LocalDate startDate, LocalDate endDate) {
+    public Optional<TreasuryExchangeRateResponse> fetchExchangeRates(String currency, LocalDate startDate, LocalDate endDate) {
         log.info("Calling TreasuryAPI for currency: '{}' on interval from {} to {}", currency, startDate, endDate);
         try {
             var response = treasuryRestClient.get()
@@ -27,7 +27,7 @@ public class TreasuryApiClient {
                             .queryParam("page[size]", 1)
                             .build())
                     .retrieve()
-                    .body(TreasuryRateResponse.class);
+                    .body(TreasuryExchangeRateResponse.class);
             log.info("Successfully received the response from the TreasuryAPI for currency '{}'", currency);
             return Optional.ofNullable(response);
         } catch (RestClientException e) {

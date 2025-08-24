@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record TreasuryRateDataResponse(
+public record TreasuryExchangeRateDataResponse(
 
         @JsonProperty("exchange_rate")
         BigDecimal exchangeRate,
