@@ -6,3 +6,4 @@ o que tenho de plus
 
 falta obrigatorio:
 - testes
+- readme
