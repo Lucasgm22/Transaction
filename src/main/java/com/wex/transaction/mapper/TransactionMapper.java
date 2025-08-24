@@ -1,7 +1,9 @@
 package com.wex.transaction.mapper;
 
 import com.wex.transaction.dto.request.CreateTransactionRequest;
+import com.wex.transaction.dto.response.ConvertedTransactionResponse;
 import com.wex.transaction.model.Transaction;
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import org.springframework.stereotype.Component;
 
@@ -21,5 +23,16 @@ public class TransactionMapper {
         transaction.setPurchaseAmount(roundedAmount);
 
         return transaction;
+    }
+
+    public ConvertedTransactionResponse toConvertedDto(Transaction transaction, BigDecimal exchangeRate, BigDecimal convertedAmount) {
+        return new ConvertedTransactionResponse(
+                transaction.getUuid(),
+                transaction.getDescription(),
+                transaction.getTransactionDate(),
+                transaction.getPurchaseAmount(),
+                exchangeRate,
+                convertedAmount
+        );
     }
 }

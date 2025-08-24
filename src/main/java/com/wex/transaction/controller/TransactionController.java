@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 import java.util.UUID;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,9 +49,15 @@ public interface TransactionController {
     })
     ConvertedTransactionResponse getConvertedTransaction(
             @Parameter(description = "Unique identifier of the transaction (UUID)", example = "a1b2c3d4-e5f6-7890-1234-567890abcdef")
-            @PathVariable UUID id,
+            @PathVariable
+            UUID id,
 
-            @Parameter(description = "Target currency for conversion, e.g., 'Brazil-Real'", required = true, example = "Brazil-Real")
-            @RequestParam String currency
+            @Parameter(description = "Target currency for conversion, if not given no conversion is made", example = "Brazil-Real")
+            @Pattern(
+                    regexp = "^[^<>\"]+-[^<>\"]+$",
+                    message = "Currency format is invalid or contains prohibited characters."
+            )
+            @RequestParam(required = false)
+            String currency
     );
 }
