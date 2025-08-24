@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Tag(name = "Transaction Management", description = "APIs for managing purchase transactions")
 public interface TransactionController {
 
-    @Operation(summary = "Store a new purchase transaction",
-            description = "Accepts a purchase transaction and persists it in the database.")
+    @Operation(summary = "Store a new transaction",
+            description = "Accepts a transaction and persists it in the database.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Transaction created successfully",
                     content = @Content(mediaType = "application/json",
