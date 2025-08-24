@@ -20,8 +20,7 @@ public class TreasuryApiClient {
         log.info("Calling TreasuryAPI for currency: '{}' on interval from {} to {}", currency, startDate, endDate);
         try {
             var response = treasuryRestClient.get()
-                    .uri(uriBuilder -> uriBuilder
-                            .path("v1/accounting/od/rates_of_exchange")
+                    .uri("v1/accounting/od/rates_of_exchange", uriBuilder -> uriBuilder
                             .queryParam("fields", "exchange_rate,record_date")
                             .queryParam("filter", "country_currency_desc:eq:" + currency + ",record_date:gte:" + startDate + ",record_date:lte:" + endDate)
                             .queryParam("sort", "-record_date")
