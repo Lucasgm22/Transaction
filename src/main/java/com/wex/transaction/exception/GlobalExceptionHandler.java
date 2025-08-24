@@ -39,7 +39,7 @@ public class GlobalExceptionHandler {
     public ErrorResponse handleRequestValueException(Exception ex, HttpServletRequest request) {
         var errors = new HashMap<String, String>();
         errors.put("requestValue", ex.getMessage());
-        log.warn("Failed to read the request: {}. Reason: {}", request.getRequestURI(), ex.getMessage());
+        log.warn("Failed to handel request value: {}. Reason: {}", request.getRequestURI(), ex.getMessage());
 
         return new ErrorResponse(
                 LocalDateTime.now(),
@@ -56,12 +56,12 @@ public class GlobalExceptionHandler {
         ex.getBindingResult().getFieldErrors().forEach(error ->
                 errors.put(error.getField(), error.getDefaultMessage())
         );
-        log.warn("Failed to read the request: {}. Reason: {}", request.getRequestURI(), ex.getMessage());
+        log.warn("Failed to validate the request: {}. Reason: {}", request.getRequestURI(), ex.getMessage());
 
         return new ErrorResponse(
                 LocalDateTime.now(),
                 HttpStatus.BAD_REQUEST.value(),
-                "Request Value error",
+                "Validation Error",
                 errors,
                 request.getRequestURI());
     }
