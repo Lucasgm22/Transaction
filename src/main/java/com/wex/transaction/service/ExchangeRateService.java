@@ -31,7 +31,7 @@ public class ExchangeRateService {
         return treasuryApiClient
                 .getTopExchangeRateByCurrencyInRecordDateRangeSortedByRecordDateDesc(currency, sixMonthsAgo, transactionDate)
                 .filter(treasuryRateResponse -> nonNull(treasuryRateResponse.data()))
-                .flatMap(response -> response.data().stream().findAny())
+                .flatMap(response -> response.data().stream().findFirst())
                 .map(treasuryRateDataResponse -> {
                     log.info("Using exchange rate {} from {}", treasuryRateDataResponse.exchangeRate(), treasuryRateDataResponse.recordDate());
                     return treasuryRateDataResponse.exchangeRate();

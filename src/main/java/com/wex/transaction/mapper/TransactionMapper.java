@@ -26,6 +26,10 @@ public class TransactionMapper {
     }
 
     public ConvertedTransactionResponse toConvertedDto(final Transaction transaction, final BigDecimal exchangeRate, final BigDecimal convertedAmount) {
+        if (transaction == null) {
+            return null;
+        }
+
         return new ConvertedTransactionResponse(
                 transaction.getUuid(),
                 transaction.getDescription(),
