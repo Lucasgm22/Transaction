@@ -1,0 +1,27 @@
+{
+    "data": [],
+    "meta": {
+        "count": 0,
+        "labels": {
+            "exchange_rate": "Exchange Rate",
+            "record_date": "Record Date"
+        },
+        "dataTypes": {
+            "exchange_rate": "NUMBER",
+            "record_date": "DATE"
+        },
+        "dataFormats": {
+            "exchange_rate": "10.2",
+            "record_date": "YYYY-MM-DD"
+        },
+        "total-count": 0,
+        "total-pages": 0
+    },
+    "links": {
+        "self": "&page%5Bnumber%5D=1&page%5Bsize%5D=1",
+        "first": "&page%5Bnumber%5D=1&page%5Bsize%5D=1",
+        "prev": null,
+        "next": null,
+        "last": "&page%5Bnumber%5D=0&page%5Bsize%5D=1"
+    }
+}

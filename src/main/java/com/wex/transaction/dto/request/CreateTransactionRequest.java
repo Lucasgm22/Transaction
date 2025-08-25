@@ -24,5 +24,5 @@ public record CreateTransactionRequest(
         @Schema(description = "Total transaction amount in USD, must be a positive value.",
                 example = "150.75")
         @NotNull @Positive
-        BigDecimal purchaseAmount
+        BigDecimal amount
 ) {}

@@ -26,8 +26,8 @@ public class TransactionService {
         var newTransaction = transactionMapper.toEntity(request);
 
         var storedTransaction = transactionRepository.save(newTransaction);
-        log.info("Transaction {} successfully stored in database", storedTransaction.getUuid());
-        return new CreateTransactionResponse(storedTransaction.getUuid());
+        log.info("Transaction {} successfully stored in database", storedTransaction.getId());
+        return new CreateTransactionResponse(storedTransaction.getId());
     }
 
     public ConvertedTransactionResponse getConvertedTransaction(final UUID id, final String currency) {

@@ -13,8 +13,8 @@ import org.springframework.test.context.DynamicPropertySource;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class TreasuryApiHealthIndicatorIT {
+@SpringBootTest
+class TreasuryApiHealthIndicatorIntegrationTest {
 
     @Autowired
     private TreasuryApiHealthIndicator treasuryApiHealthIndicator;
@@ -49,7 +49,7 @@ class TreasuryApiHealthIndicatorIT {
                 .willReturn(WireMock.aResponse()
                         .withStatus(404)
                         .withHeader("Content-Type", "application/json")
-                        .withBody("{\"error\":\"Server Error\"}")));
+                        .withBody("{\"error\":\"NOT FOUND\"}")));
 
         var health = treasuryApiHealthIndicator.health();
 

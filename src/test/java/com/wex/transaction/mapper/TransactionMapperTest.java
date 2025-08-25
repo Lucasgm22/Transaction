@@ -37,7 +37,7 @@ class TransactionMapperTest {
 
         var actualTransaction = transactionMapper.toEntity(transactionRequest);
 
-        assertNull(actualTransaction.getUuid());
+        assertNull(actualTransaction.getId());
         assertEquals("description", actualTransaction.getDescription());
         assertEquals(LocalDate.of(2024, 8, 20), actualTransaction.getTransactionDate());
         assertEquals(BigDecimal.valueOf(150.75), actualTransaction.getPurchaseAmount());
