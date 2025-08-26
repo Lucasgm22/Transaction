@@ -3,6 +3,7 @@ package com.wex.transaction.controller.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
+import com.wex.transaction.controller.TransactionController;
 import com.wex.transaction.dto.request.CreateTransactionRequest;
 import com.wex.transaction.model.Transaction;
 import com.wex.transaction.repository.TransactionRepository;
@@ -19,10 +20,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.hamcrest.Matchers.aMapWithSize;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -39,8 +43,9 @@ class TransactionControllerImplIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
+    @MockitoSpyBean
     private TransactionRepository transactionRepository;
+
 
     @RegisterExtension
     static WireMockExtension wireMockServer = WireMockExtension.newInstance()
@@ -200,6 +205,21 @@ class TransactionControllerImplIntegrationTest {
     }
 
     @Test
+    void givenInvalidCurrency_whenGetConverted_thenReturns400() throws Exception {
+        var id = UUID.randomUUID();
+
+        mockMvc.perform(get("/transaction/{id}", id)
+                        .param("currency", "Brazil-</Real>"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.timestamp").exists())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.error").value("Request Value error"))
+                .andExpect(jsonPath("$.messages", aMapWithSize(1)))
+                .andExpect(jsonPath("$.messages.requestValue").value("Currency format is invalid or contains prohibited characters."))
+                .andExpect(jsonPath("$.path").value("/transaction/" + id));
+    }
+
+    @Test
     void givenValidIdAndCurrency_whenNoExchangeRate_thenReturns404() throws Exception {
         var transaction = new Transaction();
         transaction.setDescription("Test Purchase");
@@ -251,6 +271,35 @@ class TransactionControllerImplIntegrationTest {
                 .andExpect(jsonPath("$.messages.resourceNotFound").value("Could not retrieve exchange rates for Brazil-Real"))
                 .andExpect(jsonPath("$.path").value("/transaction/" + transactionId));
 
+    }
+
+    @Test
+    void givenValidRequest_whenUnhandledException_thenReturns500() throws Exception {
+        var id = UUID.randomUUID();
+
+        when(transactionRepository.findById(id)).thenThrow(new RuntimeException("Just a test"));
+
+        mockMvc.perform(get("/transaction/{id}", id)
+                        .param("currency", "Brazil-Real"))
+                .andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.timestamp").exists())
+                .andExpect(jsonPath("$.status").value(500))
+                .andExpect(jsonPath("$.error").value("Internal Server Error"))
+                .andExpect(jsonPath("$.messages", aMapWithSize(1)))
+                .andExpect(jsonPath("$.messages.internalError").value("An unexpected error occurred. Please try again later."))
+                .andExpect(jsonPath("$.path").value("/transaction/" + id));
+    }
+
+    @Test
+    void givenInvalidPath_whenCalled_thenReturns404() throws Exception {
+        mockMvc.perform(get("/not-mapped"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.timestamp").exists())
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.error").value("Resource Not Found"))
+                .andExpect(jsonPath("$.messages", aMapWithSize(1)))
+                .andExpect(jsonPath("$.messages.resourceNotFound").value("No static resource not-mapped."))
+                .andExpect(jsonPath("$.path").value("/not-mapped"));
     }
 
     private String readStringFromFile(final String path) {

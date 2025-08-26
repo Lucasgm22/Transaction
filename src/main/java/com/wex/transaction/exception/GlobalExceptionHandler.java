@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({TransactionNotFoundException.class, ExchangeRateNotFoundException.class, NoResourceFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleResourceNotFoundException(RuntimeException ex, HttpServletRequest request) {
+    public ErrorResponse handleResourceNotFoundException(Exception ex, HttpServletRequest request) {
         var errors = new HashMap<String, String>();
         errors.put("resourceNotFound", ex.getMessage());
         log.warn("Fail to find the resource: {}. Reason: {}", request.getRequestURI(), ex.getMessage());
