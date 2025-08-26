@@ -68,7 +68,7 @@ class TransactionControllerImplIntegrationTest {
         var requestDto = new CreateTransactionRequest(
                 "New MacBook Pro",
                 LocalDate.now(),
-                new BigDecimal("2500.00")
+                BigDecimal.valueOf(2500.00)
         );
 
         mockMvc.perform(post("/transaction")
@@ -150,7 +150,7 @@ class TransactionControllerImplIntegrationTest {
 
         var transaction = new Transaction();
         transaction.setDescription("Test Purchase");
-        transaction.setPurchaseAmount(new BigDecimal("100.00"));
+        transaction.setPurchaseAmount(BigDecimal.valueOf(100.00));
         transaction.setTransactionDate(LocalDate.of(2024, 8, 20));
         var savedTransaction = transactionRepository.save(transaction);
         var transactionId = savedTransaction.getId();
@@ -223,7 +223,7 @@ class TransactionControllerImplIntegrationTest {
     void givenValidIdAndCurrency_whenNoExchangeRate_thenReturns404() throws Exception {
         var transaction = new Transaction();
         transaction.setDescription("Test Purchase");
-        transaction.setPurchaseAmount(new BigDecimal("100.00"));
+        transaction.setPurchaseAmount(BigDecimal.valueOf(100.00));
         transaction.setTransactionDate(LocalDate.of(2024, 8, 20));
         var savedTransaction = transactionRepository.save(transaction);
         var transactionId = savedTransaction.getId();
@@ -250,7 +250,7 @@ class TransactionControllerImplIntegrationTest {
     void givenValidIdAndCurrency_whenCantGetResponseFromTreasureApi_thenReturns404() throws Exception {
         var transaction = new Transaction();
         transaction.setDescription("Test Purchase");
-        transaction.setPurchaseAmount(new BigDecimal("100.00"));
+        transaction.setPurchaseAmount(BigDecimal.valueOf(100.00));
         transaction.setTransactionDate(LocalDate.of(2024, 8, 20));
         var savedTransaction = transactionRepository.save(transaction);
         var transactionId = savedTransaction.getId();
