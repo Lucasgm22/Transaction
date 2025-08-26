@@ -20,7 +20,7 @@ public record ConvertedTransactionResponse(
         LocalDate transactionDate,
 
 
-        @Schema(description = "Original transaction amount in US Dollars.",
+        @Schema(description = "Original transaction purchase amount in US Dollars.",
                 example = "150.75")
         BigDecimal originalPurchaseAmount,
 
@@ -28,7 +28,7 @@ public record ConvertedTransactionResponse(
                 example = "5.123")
         BigDecimal exchangeRate,
 
-        @Schema(description = "The converted transaction amount in the target currency.",
+        @Schema(description = "The converted transaction purchase amount in the target currency.",
                 example = "772.35")
         BigDecimal convertedAmount
 ) {}

@@ -107,7 +107,7 @@ class TransactionControllerImplIntegrationTest {
                 .andExpect(jsonPath("$.status").value(400))
                 .andExpect(jsonPath("$.error").value("Validation Error"))
                 .andExpect(jsonPath("$.messages", aMapWithSize(1)))
-                .andExpect(jsonPath("$.messages.amount").value("must be greater than 0"))
+                .andExpect(jsonPath("$.messages.purchaseAmount").value("must be greater than 0"))
                 .andExpect(jsonPath("$.path").value("/transaction"));
     }
 
@@ -140,7 +140,7 @@ class TransactionControllerImplIntegrationTest {
                 .andExpect(jsonPath("$.error").value("Validation Error"))
                 .andExpect(jsonPath("$.messages", aMapWithSize(3)))
                 .andExpect(jsonPath("$.messages.description").value("size must be between 0 and 50"))
-                .andExpect(jsonPath("$.messages.amount").value("must be greater than 0"))
+                .andExpect(jsonPath("$.messages.purchaseAmount").value("must be greater than 0"))
                 .andExpect(jsonPath("$.messages.transactionDate").value("must be a date in the past or in the present"))
                 .andExpect(jsonPath("$.path").value("/transaction"));
     }

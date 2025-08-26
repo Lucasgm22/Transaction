@@ -21,8 +21,8 @@ public record CreateTransactionRequest(
         @NotNull @PastOrPresent
         LocalDate transactionDate,
 
-        @Schema(description = "Total transaction amount in USD, must be a positive value.",
+        @Schema(description = "Total transaction purchase amount in USD, must be a positive value.",
                 example = "150.75")
         @NotNull @Positive
-        BigDecimal amount
+        BigDecimal purchaseAmount
 ) {}

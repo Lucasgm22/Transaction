@@ -38,7 +38,7 @@ public interface TransactionController {
     CreateTransactionResponse storeTransaction(@Valid @RequestBody final CreateTransactionRequest request);
 
     @Operation(summary = "Retrieve a transaction in a specified currency",
-            description = "Fetches a stored transaction by its ID and converts the purchase amount to the target currency.")
+            description = "Fetches a stored transaction by its ID and converts the purchase purchaseAmount to the target currency.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Transaction found and converted",
                     content = @Content(mediaType = "application/json",

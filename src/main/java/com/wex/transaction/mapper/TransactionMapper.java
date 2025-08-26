@@ -19,7 +19,7 @@ public class TransactionMapper {
         transaction.setDescription(request.description());
         transaction.setTransactionDate(request.transactionDate());
 
-        var roundedAmount = request.amount().setScale(2, RoundingMode.HALF_UP);
+        var roundedAmount = request.purchaseAmount().setScale(2, RoundingMode.HALF_UP);
         transaction.setPurchaseAmount(roundedAmount);
 
         return transaction;
