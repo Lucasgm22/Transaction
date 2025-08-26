@@ -115,7 +115,6 @@ Application, JVM, and custom business metrics are exposed in Prometheus format.
 - **Key Metrics:**
   - `http_server_requests_seconds`: Latency and count for all incoming API requests.
   - `http_client_requests_seconds`: Latency and count for outgoing calls made by the `RestClient`.
-  - `transactions_conversions_success_total`: A custom counter for successful currency conversions.
   - JVM performance metrics (memory, CPU, garbage collection).
 
 ---
