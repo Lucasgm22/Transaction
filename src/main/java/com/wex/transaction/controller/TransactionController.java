@@ -43,7 +43,13 @@ public interface TransactionController {
             @ApiResponse(responseCode = "200", description = "Transaction found and converted",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ConvertedTransactionResponse.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid input data",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "404", description = "Transaction not found or exchange rate not available for the given date",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "500", description = "Internal Server error",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorResponse.class)))
     })

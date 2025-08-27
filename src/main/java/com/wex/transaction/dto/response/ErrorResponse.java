@@ -22,6 +22,6 @@ public record ErrorResponse(
         Map<String, String> messages,
 
         @Schema(description = "The path of the request that resulted in an error.",
-                example = "/transactions/a1b2c3d4-e5f6-7890-1234-567890abcdef")
+                example = "/transaction/a1b2c3d4-e5f6-7890-1234-567890abcdef")
         String path
 ) {}
