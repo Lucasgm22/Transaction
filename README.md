@@ -22,7 +22,7 @@ This project is a solution for a technical challenge that involves creating a RE
 
 ## 🛠️ Tech Stack
 
-* **Language & Framework:** Java 17+, Spring Boot 3+
+* **Language & Framework:** Java 21+, Spring Boot 3+
 * **Data:** Spring Data JPA, H2 Database (In-Memory)
 * **API Client:** Spring `RestClient`
 * **Build Tool:** Gradle
@@ -70,7 +70,7 @@ A test report will be generated in build/reports/tests/test/index.html.
 This application can be easily containerized into an optimized Docker image without needing a Dockerfile, thanks to Spring Boot's native support for Cloud Native Buildpacks.
 
 1. **Build the Image:**
-Execute the `bootBuildImage` Gradle task. This will create a Docker image with a name based on the project's artifact ID and version (e.g., `fiscal-transaction-api:0.0.1-SNAPSHOT`).
+Execute the `bootBuildImage` Gradle task. This will create a Docker image with a name based on the project's artifact ID and version (e.g., `transaction:0.0.1-SNAPSHOT`).
 ```bash
 ./gradlew bootBuildImage
 ```
