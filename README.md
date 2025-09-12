@@ -26,7 +26,7 @@ This project is a solution for a technical challenge that involves creating a RE
 * **Data:** Spring Data JPA, H2 Database (In-Memory)
 * **API Client:** Spring `RestClient`
 * **Build Tool:** Gradle
-* **Testing:** JUnit 5, Mockito, WireMock, AssertJ
+* **Testing:** JUnit 5, Mockito, WireMock
 * **Documentation:** Springdoc OpenAPI
 * **Observability:** Spring Boot Actuator, Micrometer (for Metrics & Tracing), Prometheus registry
 
