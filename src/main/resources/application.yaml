@@ -23,3 +23,5 @@ management:
       group:
         readiness.include: "readinessState,db,treasuryApi"
         liveness.include: "livenessState"
+
+spring.threads.virtual.enabled: true
