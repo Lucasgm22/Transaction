@@ -9,28 +9,45 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ExchangeRateServiceTest {
 
 
-    @InjectMocks
     private ExchangeRateService exchangeRateService;
 
     @Mock
     private TreasuryApiClient treasuryApiClient;
+
+    @Mock
+    private CacheManager cacheManager;
+
+    @Mock
+    private Cache exchangeRateCache;
+
+    @BeforeEach
+    void setup() {
+
+        when(cacheManager.getCache(anyString())).thenReturn(exchangeRateCache);
+
+        exchangeRateService = new ExchangeRateService(treasuryApiClient, cacheManager);
+    }
 
     @Test
     void givenNullCurrency_whenGetExchangeRate_thenReturnOne() {
@@ -47,13 +64,27 @@ class ExchangeRateServiceTest {
     }
 
     @Test
-    void givenValidCurrencyAndDate_whenTreasuryApiReturnsValid_thenCorrectlyReturnExchangeRate() {
+    void givenExchangeRateCached_whenGetExchangeRate_theReturnImediatly() {
+        var date = LocalDate.of(2024, 8, 20);
+        var currency = "Brazil-Real";
+
+        when(exchangeRateCache.get(currency + "::" + date, BigDecimal.class)).thenReturn(BigDecimal.valueOf(5.5));
+        var actualExchangeRate = exchangeRateService.getExchangeRate(currency, date);
+
+        verifyNoInteractions(treasuryApiClient);
+        verifyNoMoreInteractions(exchangeRateCache);
+        assertEquals(BigDecimal.valueOf(5.5), actualExchangeRate);
+    }
+
+    @Test
+    void givenValidCurrencyAndDate_whenTreasuryApiReturnsValid_thenCorrectlyReturnExchangeRateAndCacheValues() {
         var date = LocalDate.of(2024, 8, 20);
         var sixMonthsAgo = date.minusMonths(6);
         var currency = "Brazil-Real";
+        var recordDate = LocalDate.of(2024, 6, 20);
 
         var treasuryApiResponse = new TreasuryExchangeRateResponse(
-                List.of(new TreasuryExchangeRateDataResponse(BigDecimal.valueOf(5.5), LocalDate.of(2024, 6, 20)))
+                List.of(new TreasuryExchangeRateDataResponse(BigDecimal.valueOf(5.5), recordDate))
         );
 
         when(treasuryApiClient.getTopExchangeRateByCurrencyInRecordDateRangeSortedByRecordDateDesc(currency, sixMonthsAgo, date))
@@ -61,7 +92,12 @@ class ExchangeRateServiceTest {
 
         var actualExchangeRate = exchangeRateService.getExchangeRate(currency, date);
 
+        verify(exchangeRateCache).get(currency + "::" + date, BigDecimal.class);
         assertEquals(BigDecimal.valueOf(5.5), actualExchangeRate);
+        for (var dateToCache = recordDate; !dateToCache.isAfter(date); dateToCache = dateToCache.plusDays(1)) {
+            verify(exchangeRateCache).putIfAbsent(currency + "::" + dateToCache, BigDecimal.valueOf(5.5));
+        }
+        verifyNoMoreInteractions(exchangeRateCache);
         verify(treasuryApiClient, only()).getTopExchangeRateByCurrencyInRecordDateRangeSortedByRecordDateDesc(currency, sixMonthsAgo, date);
     }
 
@@ -77,6 +113,9 @@ class ExchangeRateServiceTest {
                 .thenReturn(Optional.of(treasuryApiResponse));
 
         var ex = assertThrowsExactly(ExchangeRateNotFoundException.class, () -> exchangeRateService.getExchangeRate(currency, date));
+
+        verify(exchangeRateCache).get(currency + "::" + date, BigDecimal.class);
+        verifyNoMoreInteractions(exchangeRateCache);
 
         assertEquals("Could not retrieve exchange rates for " + currency, ex.getMessage());
         verify(treasuryApiClient, only()).getTopExchangeRateByCurrencyInRecordDateRangeSortedByRecordDateDesc(currency, sixMonthsAgo, date);
@@ -95,6 +134,9 @@ class ExchangeRateServiceTest {
 
         var ex = assertThrowsExactly(ExchangeRateNotFoundException.class, () -> exchangeRateService.getExchangeRate(currency, date));
 
+        verify(exchangeRateCache).get(currency + "::" + date, BigDecimal.class);
+        verifyNoMoreInteractions(exchangeRateCache);
+
         assertEquals("Could not retrieve exchange rates for " + currency, ex.getMessage());
         verify(treasuryApiClient, only()).getTopExchangeRateByCurrencyInRecordDateRangeSortedByRecordDateDesc(currency, sixMonthsAgo, date);
     }
@@ -110,6 +152,9 @@ class ExchangeRateServiceTest {
                 .thenReturn(Optional.empty());
 
         var ex = assertThrowsExactly(ExchangeRateNotFoundException.class, () -> exchangeRateService.getExchangeRate(currency, date));
+
+        verify(exchangeRateCache).get(currency + "::" + date, BigDecimal.class);
+        verifyNoMoreInteractions(exchangeRateCache);
 
         assertEquals("Could not retrieve exchange rates for " + currency, ex.getMessage());
         verify(treasuryApiClient, only()).getTopExchangeRateByCurrencyInRecordDateRangeSortedByRecordDateDesc(currency, sixMonthsAgo, date);

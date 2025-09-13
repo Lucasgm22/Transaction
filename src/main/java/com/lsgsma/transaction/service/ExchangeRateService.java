@@ -57,7 +57,8 @@ public class ExchangeRateService {
 
     private void cacheWarmGetExchangeRateCache(final String currency, final LocalDate transactionDate, final LocalDate recordDate, final BigDecimal value) {
         for (var dateToCache = recordDate; !dateToCache.isAfter(transactionDate); dateToCache = dateToCache.plusDays(1)) {
-            exchangeRateCache.put(buildCacheKey(currency, dateToCache), value);
+            log.debug("Caching {}::{}, with value {}", currency, dateToCache, value);
+            exchangeRateCache.putIfAbsent(buildCacheKey(currency, dateToCache), value);
         }
     }
 
