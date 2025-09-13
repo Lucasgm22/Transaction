@@ -29,4 +29,7 @@ spring:
   cache:
     cache-name: "exchange-rate-cache"
     caffeine.spec: "recordStats,maximumSize=5000,expireAfterAccess=60m"
+  jpa:
+    open-in-view: false
+    hibernate.ddl-auto: "validate"
   threads.virtual.enabled: "true"

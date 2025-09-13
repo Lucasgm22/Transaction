@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.lsgsma'
-version = '1.0.1'
+version = '1.0.2'
 description = 'This is a application that allows you to store purchase transactions and retrieve them converted to other currencies using the Treasury Reporting Rates of Exchange API.'
 
 java {
@@ -34,6 +34,7 @@ dependencies {
 	implementation 'com.github.ben-manes.caffeine:caffeine'
 	implementation 'io.micrometer:micrometer-tracing-bridge-brave'
 	implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
+	implementation 'org.flywaydb:flyway-core'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-cache'
