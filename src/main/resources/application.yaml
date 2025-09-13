@@ -1,3 +1,6 @@
+api.treasury:
+  base-url: "https://api.fiscaldata.treasury.gov/services/api/fiscal_service"
+
 logging.level:
   root: "INFO"
   org:
@@ -5,28 +8,25 @@ logging.level:
     hibernate: "WARN"
   com.zaxxer.hikari: "WARN"
 
+management:
+  endpoint:
+    health:
+      group:
+        liveness.include: "livenessState"
+        readiness.include: "readinessState,db,treasuryApi"
+      show-details: "ALWAYS"
+  endpoints:
+    web.exposure.include: "health,info,prometheus,loggers"
+  health:
+    probes.enabled: "true"
+  server.port: 4444
+  tracing.sampling.probability: 1
 
-api.treasury:
-  base-url: "https://api.fiscaldata.treasury.gov/services/api/fiscal_service"
 
 server.shutdown: "graceful"
 
-management:
-  tracing.sampling.probability: 1
-  server.port: 4444
-  health:
-    probes.enabled: "true"
-  endpoints:
-    web.exposure.include: "health,info,prometheus,loggers"
-  endpoint:
-    health:
-      show-details: "ALWAYS"
-      group:
-        readiness.include: "readinessState,db,treasuryApi"
-        liveness.include: "livenessState"
-
 spring:
-  threads.virtual.enabled: "true"
   cache:
-    caffeine.spec: "recordStats,maximumSize=5000,expireAfterAccess=60m"
     cache-name: "exchange-rate-cache"
+    caffeine.spec: "recordStats,maximumSize=5000,expireAfterAccess=60m"
+  threads.virtual.enabled: "true"
