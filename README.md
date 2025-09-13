@@ -141,11 +141,11 @@ Performance tests were conducted to validate the application's behavior under di
 
 This test simulates a realistic workload of 100 concurrent users with a 1-second pacing time between requests, representing users interacting with the system in a normal fashion.
 
-| Metric | Value |
-| :--- | :--- |
+| Metric | Value          |
+| :--- |:---------------|
 | **Requests per Second (RPS)** | **~82 reqs/s** |
-| **p95 Latency** | **5.26 ms** |
-| **Error Rate** | **0.00%** |
+| **p95 Latency** | **6.26 ms**    |
+| **Error Rate** | **0.00%**      |
 
 **Analysis:** Under a realistic mixed load, the application is extremely responsive and stable.
 
@@ -153,11 +153,11 @@ This test simulates a realistic workload of 100 concurrent users with a 1-second
 
 This test was conducted without any pacing time (`sleep`) to determine the maximum throughput of the application with 100 concurrent threads.
 
-| Metric | Value |
-| :--- | :--- |
-| **Requests per Second (RPS)** | **~4,823 reqs/s** |
-| **p95 Latency** | **36.09 ms** |
-| **Error Rate** | **0.00%** |
+| Metric | Value              |
+| :--- |:-------------------|
+| **Requests per Second (RPS)** | **~3, 872 reqs/s** |
+| **p95 Latency** | **58.49 ms**       |
+| **Error Rate** | **0.00%**          |
 
 **Analysis:** The stress test revealed a maximum throughput of approximately 4,800 requests per second. Even at this peak load, the application remained perfectly stable with a 0% error rate, and the p95 latency was excellent at ~36ms, demonstrating a highly efficient and robust architecture.
 
