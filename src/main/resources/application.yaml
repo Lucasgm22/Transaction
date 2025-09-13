@@ -28,5 +28,5 @@ management:
 spring:
   threads.virtual.enabled: "true"
   cache:
-    caffeine.spec: "recordStats"
+    caffeine.spec: "recordStats,maximumSize=5000,expireAfterAccess=60m"
     cache-name: "exchange-rate-cache"
