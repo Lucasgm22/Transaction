@@ -4,6 +4,7 @@ import com.lsgsma.transaction.client.TreasuryApiClient;
 import com.lsgsma.transaction.dto.client.response.TreasuryExchangeRateDataResponse;
 import com.lsgsma.transaction.dto.client.response.TreasuryExchangeRateResponse;
 import com.lsgsma.transaction.exception.ExchangeRateNotFoundException;
+import com.lsgsma.transaction.infra.CacheWarmingService;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -41,12 +42,15 @@ class ExchangeRateServiceTest {
     @Mock
     private Cache exchangeRateCache;
 
+    @Mock
+    private CacheWarmingService cacheWarmingService;
+
     @BeforeEach
     void setup() {
 
         when(cacheManager.getCache(anyString())).thenReturn(exchangeRateCache);
 
-        exchangeRateService = new ExchangeRateService(treasuryApiClient, cacheManager);
+        exchangeRateService = new ExchangeRateService(treasuryApiClient, cacheManager, cacheWarmingService);
     }
 
     @Test
@@ -94,9 +98,8 @@ class ExchangeRateServiceTest {
 
         verify(exchangeRateCache).get(currency + "::" + date, BigDecimal.class);
         assertEquals(BigDecimal.valueOf(5.5), actualExchangeRate);
-        for (var dateToCache = recordDate; !dateToCache.isAfter(date); dateToCache = dateToCache.plusDays(1)) {
-            verify(exchangeRateCache).putIfAbsent(currency + "::" + dateToCache, BigDecimal.valueOf(5.5));
-        }
+
+        verify(cacheWarmingService, only()).warmExchangeRateCache(currency, date, recordDate, BigDecimal.valueOf(5.5));
         verifyNoMoreInteractions(exchangeRateCache);
         verify(treasuryApiClient, only()).getTopExchangeRateByCurrencyInRecordDateRangeSortedByRecordDateDesc(currency, sixMonthsAgo, date);
     }

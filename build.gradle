@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.lsgsma'
-version = '1.0.0'
+version = '1.0.1'
 description = 'This is a application that allows you to store purchase transactions and retrieve them converted to other currencies using the Treasury Reporting Rates of Exchange API.'
 
 java {

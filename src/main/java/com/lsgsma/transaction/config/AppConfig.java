@@ -14,6 +14,8 @@ public class AppConfig {
     private final String treasuryApiBaseUrl;
     private final ObservationRegistry observationRegistry;
 
+    public static final String EXCHANGE_RATE_CACHE = "exchange-rate-cache";
+
     public AppConfig(@Value("${api.treasury.base-url}")
                      final String treasuryApiBaseUrl,
                      final ObservationRegistry observationRegistry) {
