@@ -27,4 +27,6 @@ management:
 
 spring:
   threads.virtual.enabled: "true"
-  cache.cache-name: "exchange-rate-cache"
+  cache:
+    caffeine.spec: "recordStats"
+    cache-name: "exchange-rate-cache"
