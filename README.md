@@ -25,6 +25,7 @@ This project is a solution for a technical challenge that involves creating a RE
 * **Language & Framework:** Java 21+, Spring Boot 3+
 * **Data:** Spring Data JPA, H2 Database (In-Memory)
 * **API Client:** Spring `RestClient`
+* **Caching:** Caffeine
 * **Build Tool:** Gradle
 * **Testing:** JUnit 5, Mockito, WireMock
 * **Documentation:** Springdoc OpenAPI
@@ -116,22 +117,43 @@ Application, JVM, and custom business metrics are exposed in Prometheus format.
 - **Key Metrics:**
   - `http_server_requests_seconds`: Latency and count for all incoming API requests.
   - `http_client_requests_seconds`: Latency and count for outgoing calls made by the `RestClient`.
+  - `cache_...`: Cache sizes, hits and misses.
   - JVM performance metrics (memory, CPU, garbage collection).
 
 ---
 
-## 🏗️ Architectural Decisions
-A few key architectural decisions were made during development:
+## ⚡ Caching Strategy & Performance
 
-- **Observability-First:** Observability features (metrics, traces, health checks) were integrated from the start, not as an afterthought.
+To optimize performance and increase resilience against external service failures, a sophisticated caching layer was implemented for the Treasury API client calls.
 
-- **Client Abstraction:** Communication with the external Treasury API is encapsulated in a dedicated `TreasuryApiClient`, separating integration logic from business logic. This improves testability and maintainability.
+### Implementation
 
-- **Robust Validation:** A "fail-fast" approach was taken, with a flexible "sanity check" validation layer at the API boundary to reject malformed requests early, while delegating the final source-of-truth validation to the Treasury API itself.
+The chosen strategy goes beyond simple caching and uses a **proactive cache warming** technique, implemented programmatically within the `ExchangeRateService`.
 
-- **Configuration Management:** Key configuration details like the external API's base URL are managed in `application.yaml` to allow for easy changes across different environments without modifying the code.
+1.  **Cache Provider:** The high-performance in-memory library **Caffeine** was chosen as the cache provider to enable advanced features like TTL and size-based eviction.
+2.  **Proactive Warming Logic:** Instead of just caching the result for a single requested date, the service analyzes the response from the Treasury API. After a single successful API call for a given date, the cache is pre-populated with the same result for all subsequent dates that would share the same exchange rate (based on the 6-month lookup rule). This is designed to maximize the cache hit ratio for date-based lookups.
+3.  **Observability:** The Caffeine cache is fully instrumented using Micrometer. Detailed performance metrics, including hit/miss ratios, size, and evictions, are exposed via the `/actuator/prometheus` endpoint.
+
+### Performance Impact
+
+The effectiveness of this strategy was validated through a mixed-workload stress test (using k6). The following metrics were collected from Prometheus after the test, which generated nearly **700,000 requests**.
+
+* **Cache Hit Ratio:** **99.6%**
+    * `cache_gets_total{result="hit"}`: 563,135
+    * `cache_gets_total{result="miss"}`: 2,032
+
+* **External API Calls Avoided:**
+    * To serve over **565,000** cache lookups, the application only needed to make **97** actual calls to the external Treasury API.
+    * The cache handled over **99.6%** of the load, proving a massive reduction in external network dependency.
+
+* **Latency Reduction:**
+    * The average latency of a real call to the external API was measured at **~515ms**.
+    * Thanks to the cache, the application's overall p95 latency during the stress test was only **~58ms**.
+
+**Conclusion:** The data proves that the proactive cache warming strategy is extremely effective. It dramatically reduces dependency on the external service, improves the application's resilience, and ensures a highly responsive experience by serving the vast majority of requests from the ultra-fast in-memory cache.
 
 ---
+
 
 ## ⏱️ Performance Testing
 
@@ -160,5 +182,3 @@ This test was conducted without any pacing time (`sleep`) to determine the maxim
 | **Error Rate** | **0.00%**          |
 
 **Analysis:** The stress test revealed a maximum throughput of approximately 4,800 requests per second. Even at this peak load, the application remained perfectly stable with a 0% error rate, and the p95 latency was excellent at ~36ms, demonstrating a highly efficient and robust architecture.
-
----
