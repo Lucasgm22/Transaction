@@ -1,27 +1,30 @@
 logging.level:
-  root: INFO
+  root: "INFO"
   org:
-    springframework: WARN
-    hibernate: WARN
-  com.zaxxer.hikari: WARN
+    springframework: "WARN"
+    hibernate: "WARN"
+  com.zaxxer.hikari: "WARN"
 
 
-api.treasury.base-url: https://api.fiscaldata.treasury.gov/services/api/fiscal_service
+api.treasury:
+  base-url: "https://api.fiscaldata.treasury.gov/services/api/fiscal_service"
 
-server.shutdown: graceful
+server.shutdown: "graceful"
 
 management:
   tracing.sampling.probability: 1
   server.port: 4444
   health:
-    probes.enabled: true
+    probes.enabled: "true"
   endpoints:
     web.exposure.include: "health,info,prometheus,loggers"
   endpoint:
     health:
-      show-details: ALWAYS
+      show-details: "ALWAYS"
       group:
         readiness.include: "readinessState,db,treasuryApi"
         liveness.include: "livenessState"
 
-spring.threads.virtual.enabled: true
+spring:
+  threads.virtual.enabled: "true"
+  cache.cache-name: "exchange-rate-cache"
