@@ -159,6 +159,19 @@ The effectiveness of this strategy was validated through a mixed-workload stress
 
 Performance tests were conducted to validate the application's behavior under different types of load.
 
+### Test Environment
+
+The entire test environment, including the application, and load generator, was run using Docker to ensure consistency and reproducibility.
+
+* **Host Machine:** Intel i5-1035G1 (4 Cores, 8 Threads), 16GB RAM
+* **Container Resource Allocation:**
+  * **Application (This Project):**
+    * CPU Limit: `1.5 vCPUs`
+    * Memory Limit: `2 GB`
+  * **Load Generator (k6):**
+    * CPU Limit: `2.0 vCPUs`
+    * Memory Limit: `1 GB`
+
 ### Scenario 1: Realistic Load Test
 
 This test simulates a realistic workload of 100 concurrent users with a 1-second pacing time between requests, representing users interacting with the system in a normal fashion.
@@ -166,7 +179,7 @@ This test simulates a realistic workload of 100 concurrent users with a 1-second
 | Metric | Value          |
 | :--- |:---------------|
 | **Requests per Second (RPS)** | **~82 reqs/s** |
-| **p95 Latency** | **6.26 ms**    |
+| **p95 Latency** | **5.76 ms**    |
 | **Error Rate** | **0.00%**      |
 
 **Analysis:** Under a realistic mixed load, the application is extremely responsive and stable.
@@ -177,8 +190,8 @@ This test was conducted without any pacing time (`sleep`) to determine the maxim
 
 | Metric | Value              |
 | :--- |:-------------------|
-| **Requests per Second (RPS)** | **~3, 872 reqs/s** |
-| **p95 Latency** | **58.49 ms**       |
+| **Requests per Second (RPS)** | **~1, 560 reqs/s** |
+| **p95 Latency** | **272.14ms**       |
 | **Error Rate** | **0.00%**          |
 
-**Analysis:** The stress test revealed a maximum throughput of approximately 4,800 requests per second. Even at this peak load, the application remained perfectly stable with a 0% error rate, and the p95 latency was excellent at ~36ms, demonstrating a highly efficient and robust architecture.
+**Analysis:** The stress test revealed a maximum throughput of approximately 1,560 requests per second. Even at this peak load, the application remained perfectly stable with a 0% error rate, and the p95 latency was excellent at 272.14ms, demonstrating a highly efficient and robust architecture.
