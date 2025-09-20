@@ -58,15 +58,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Debug Token Permissions
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "Checking token permissions..."
-          gh auth status --show-token
-          echo "Inspecting token scopes via GitHub API..."
-          curl -s -I -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/ | grep "x-oauth-scopes"
-
       - name: Build Spring Boot Image
         run: ./gradlew bootBuildImage
 
