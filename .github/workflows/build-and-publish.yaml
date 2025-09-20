@@ -1,13 +1,39 @@
-name: Publish Docker Image to GHCR
+name: Java CI with Gradle
 
 on:
   push:
+    branches: [ "main", "develop" ]
+  pull_request:
     branches: [ "main" ]
 
 jobs:
-  publish:
+  build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+
+      - name: Build and test with Gradle
+        run: ./gradlew build
+
+  publish:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    needs: build
+
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
@@ -22,6 +48,9 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
         with:
@@ -30,7 +59,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Spring Boot Image
-        run: ./gradlew buildBootImage
+        run: ./gradlew bootBuildImage
 
       - name: Prepare Image Tag
         id: prep
@@ -43,9 +72,7 @@ jobs:
       - name: Tag and Push Docker Image
         run: |
           DEFAULT_IMAGE_NAME=$(./gradlew properties -q | grep "^name:" | awk '{print $2}')
-          
           docker tag "${DEFAULT_IMAGE_NAME}:${VERSION}" "${IMAGE_ID}:${VERSION}"
           docker tag "${DEFAULT_IMAGE_NAME}:${VERSION}" "${IMAGE_ID}:latest"
-          
           docker push "${IMAGE_ID}:${VERSION}"
           docker push "${IMAGE_ID}:latest"
