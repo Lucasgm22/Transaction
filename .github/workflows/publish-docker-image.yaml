@@ -1,0 +1,51 @@
+name: Publish Docker Image to GHCR
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Spring Boot Image
+        run: ./gradlew buildBootImage
+
+      - name: Prepare Image Tag
+        id: prep
+        run: |
+          IMAGE_ID=ghcr.io/$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          VERSION=$(./gradlew properties -q | grep "^version:" | awk '{print $2}')
+          echo "IMAGE_ID=$IMAGE_ID" >> $GITHUB_ENV
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Tag and Push Docker Image
+        run: |
+          DEFAULT_IMAGE_NAME=$(./gradlew properties -q | grep "^name:" | awk '{print $2}')
+          
+          docker tag "${DEFAULT_IMAGE_NAME}:${VERSION}" "${IMAGE_ID}:${VERSION}"
+          docker tag "${DEFAULT_IMAGE_NAME}:${VERSION}" "${IMAGE_ID}:latest"
+          
+          docker push "${IMAGE_ID}:${VERSION}"
+          docker push "${IMAGE_ID}:latest"
