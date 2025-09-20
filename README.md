@@ -1,5 +1,5 @@
 # Transaction API
-[![Java CI with Gradle](https://github.com/Lucasgm22/Transaction/actions/workflows/build-and-publish.yaml/badge.svg)](https://github.com/Lucasgm22/Transaction/actions/workflows/build-and-publish.yaml)
+[![Build, Test and Publish](https://github.com/Lucasgm22/Transaction/actions/workflows/build-and-publish.yaml/badge.svg?branch=main)](https://github.com/Lucasgm22/Transaction/actions/workflows/build-and-publish.yaml)
 
 This project is a solution for a technical challenge that involves creating a RESTful API to store purchase transactions and retrieve them with their value converted to a specified country's currency. The application is built with a focus on modern, production-ready practices, including comprehensive testing, documentation, and a full suite of observability features.
 
