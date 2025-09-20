@@ -1,11 +1,11 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.5.5'
+	id 'org.springframework.boot' version '3.5.6'
 	id 'io.spring.dependency-management' version '1.1.7'
 }
 
 group = 'com.lsgsma'
-version = '1.0.2'
+version = '1.0.3'
 description = 'This is a application that allows you to store purchase transactions and retrieve them converted to other currencies using the Treasury Reporting Rates of Exchange API.'
 
 java {
