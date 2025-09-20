@@ -64,6 +64,8 @@ jobs:
         run: |
           echo "Checking token permissions..."
           gh auth status --show-token
+          echo "Inspecting token scopes via GitHub API..."
+          curl -s -I -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/ | grep "x-oauth-scopes"
 
       - name: Build Spring Boot Image
         run: ./gradlew bootBuildImage
