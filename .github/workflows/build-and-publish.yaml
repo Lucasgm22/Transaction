@@ -63,7 +63,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "Checking token permissions..."
-          # Este comando inspeciona o token e lista os escopos (permissões) dele
           gh auth status --show-token
 
       - name: Build Spring Boot Image
