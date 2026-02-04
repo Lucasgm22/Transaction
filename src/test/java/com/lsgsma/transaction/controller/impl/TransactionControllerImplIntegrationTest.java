@@ -1,6 +1,6 @@
 package com.lsgsma.transaction.controller.impl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.lsgsma.transaction.dto.request.CreateTransactionRequest;
@@ -14,7 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cache.CacheManager;
 import org.springframework.http.MediaType;
@@ -26,7 +26,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.hamcrest.Matchers.aMapWithSize;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -302,7 +301,7 @@ class TransactionControllerImplIntegrationTest {
                 .andExpect(jsonPath("$.status").value(404))
                 .andExpect(jsonPath("$.error").value("Resource Not Found"))
                 .andExpect(jsonPath("$.messages", aMapWithSize(1)))
-                .andExpect(jsonPath("$.messages.resourceNotFound").value("No static resource not-mapped."))
+                .andExpect(jsonPath("$.messages.resourceNotFound").value("No static resource not-mapped for request '/not-mapped'."))
                 .andExpect(jsonPath("$.path").value("/not-mapped"));
     }
 
@@ -312,7 +311,7 @@ class TransactionControllerImplIntegrationTest {
                     .requireNonNull(getClass().getClassLoader().getResourceAsStream(path))
                     .readAllBytes()
             );
-        } catch (Exception e) {
+        } catch (Exception _) {
             throw new RuntimeException("Cound not read file: " + path);
         }
     }

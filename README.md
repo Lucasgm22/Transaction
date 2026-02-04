@@ -22,7 +22,7 @@ This project is a solution for a technical challenge that involves creating a RE
 
 ## 🛠️ Tech Stack
 
-* **Language & Framework:** Java 21+, Spring Boot 3+
+* **Language & Framework:** Java 25+, Spring Boot 4+
 * **Data:** Spring Data JPA, H2 Database (In-Memory)
 * **API Client:** Spring `RestClient`
 * **Caching:** Caffeine
@@ -37,8 +37,8 @@ This project is a solution for a technical challenge that involves creating a RE
 
 ### Prerequisites
 
-* Java (JDK) 21 or newer
-* Gradle 8.x
+* Java (JDK) 25 or newer
+* Gradle 9.x
 
 ### Running the Application
 

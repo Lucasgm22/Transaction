@@ -31,5 +31,5 @@ spring:
     caffeine.spec: "recordStats,maximumSize=5000,expireAfterAccess=60m"
   jpa:
     open-in-view: false
-    hibernate.ddl-auto: "validate"
+    hibernate.ddl-auto: "update"
   threads.virtual.enabled: "true"
