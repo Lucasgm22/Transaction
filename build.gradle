@@ -57,5 +57,5 @@ tasks.named('test') {
 }
 
 bootBuildImage {
-	description = description
+	environment["BP_OCI_DESCRIPTION"] = project.description
 }
