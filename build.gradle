@@ -33,7 +33,6 @@ dependencies {
 
 	implementation 'com.github.ben-manes.caffeine:caffeine'
 	implementation 'io.micrometer:micrometer-tracing-bridge-brave'
-	implementation 'io.zipkin.reporter2:zipkin-reporter-brave'
 	implementation 'org.springframework.boot:spring-boot-micrometer-tracing-brave'
 	implementation 'org.springframework.boot:spring-boot-starter-zipkin'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.1'
